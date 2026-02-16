@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ASCM Dev — Portafolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* =========================
+     Variables y reset
+     ========================= */
+  :root{
+    --bg:#071026;
+    --card:#071827;
+    --muted:#9aa4b2;
+    --accent:#6ee7b7;
+    --accent-2:#7dd3fc;
+    --accent-3:#fbbf24;
+    --white:#e6eef6;
+    --glass-border: rgba(255,255,255,0.06);
+    --radius:16px;
+    --max-width:1200px;
+    --nav-height:72px;
+    --transition: 420ms cubic-bezier(.2,.9,.3,1);
+    --shadow: 0 12px 40px rgba(2,6,23,0.6);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:
+      radial-gradient(800px 400px at 10% 10%, rgba(125,211,252,0.04), transparent 8%),
+      radial-gradient(900px 500px at 90% 90%, rgba(110,231,183,0.03), transparent 8%),
+      linear-gradient(180deg,#041022 0%, var(--bg) 100%);
+    color:var(--white);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.45;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none}
+  img{display:block; max-width:100%; height:auto}
+
+  /* =========================
+     Header / Navegación
+     ========================= */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    height:var(--nav-height);
+    display:flex; align-items:center; justify-content:center;
+    z-index:120;
+    backdrop-filter: blur(8px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 6px 20px rgba(2,6,23,0.35);
+  }
+  .nav-inner{
+    width:100%; max-width:var(--max-width); padding:0 20px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; gap:12px; align-items:center; font-weight:800; font-family:"Space Grotesk",Inter}
+  .logo{
+    width:48px; height:48px; border-radius:12px; overflow:hidden; display:grid; place-items:center;
+    box-shadow: 0 8px 22px rgba(110,231,183,0.12);
+    flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  }
+  .logo img{ width:100%; height:100%; object-fit:cover; display:block }
+
+  nav ul{display:flex; gap:18px; list-style:none; margin:0; padding:0; align-items:center}
+  nav a{color:var(--muted); font-weight:600; padding:8px 12px; border-radius:10px; transition: color var(--transition), transform var(--transition)}
+  nav a:hover{ color:var(--white); transform:translateY(-3px) }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:12px;
+    background: linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#04202a; font-weight:800; border:none; cursor:pointer; box-shadow: 0 10px 30px rgba(125,211,252,0.06);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .btn:hover{ transform:translateY(-6px); box-shadow: 0 20px 40px rgba(125,211,252,0.12) }
+
+  .btn-ghost{
+    background:transparent; color:var(--white); border:1px solid var(--glass-border); padding:9px 14px; border-radius:12px;
+    transition: background var(--transition), transform var(--transition);
+  }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.02); transform:translateY(-4px) }
+
+  .cta{ background: linear-gradient(90deg,var(--accent-3),var(--accent-2)); color:#04202a; padding:8px 14px; border-radius:10px; font-weight:700 }
+
+  /* =========================
+     Layout principal
+     ========================= */
+  main{position:relative; z-index:10; padding-top:calc(var(--nav-height) + 28px)}
+  .container{ width:100%; max-width:var(--max-width); margin:0 auto; padding:0 20px }
+
+  /* =========================
+     Hero
+     ========================= */
+  .hero{ display:flex; gap:28px; align-items:stretch; padding:36px 0 48px }
+  .hero-grid{ display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:start }
+  .card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--radius); padding:28px; border:1px solid var(--glass-border); box-shadow:var(--shadow) }
+
+  .intro h1{
+    margin:0 0 8px 0;
+    font-size: clamp(30px, 5vw, 48px);
+    line-height:1.02;
+    font-family:"Space Grotesk", Inter;
+    letter-spacing:-0.6px;
+    background: linear-gradient(90deg, #fff, #cfefff 60%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .lead{ margin:0 0 18px 0; color:var(--muted); font-size:16px }
+
+  /* Animated gradient underline */
+  .underline{
+    display:inline-block;
+    height:6px;
+    width:100%;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3));
+    border-radius:6px;
+    transform-origin:left center;
+    animation: slideGradient 6s linear infinite;
+    opacity:0.12;
+    margin-top:14px;
+  }
+  @keyframes slideGradient{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  .typing{ display:inline-block; color:var(--accent-2); font-weight:700; font-family:"Space Grotesk"; min-height:26px }
+  .cursor{ display:inline-block; width:2px; height:22px; background:var(--accent-2); margin-left:6px; vertical-align:middle; animation: blink 1s steps(2) infinite }
+  @keyframes blink{50%{opacity:0}}
+
+  /* floating blobs behind hero */
+  .blob-wrap{ position:absolute; inset:auto 0 0 0; height:420px; pointer-events:none; z-index:0; overflow:visible }
+  .blob{
+    position:absolute; filter:blur(40px); opacity:0.12; transform:translateZ(0);
+  }
+  .blob.a{ width:420px; height:420px; left:-80px; bottom:-120px; background:radial-gradient(circle at 30% 30%, var(--accent-2), transparent 40%); animation: floatA 12s ease-in-out infinite; }
+  .blob.b{ width:360px; height:360px; right:-60px; bottom:-80px; background:radial-gradient(circle at 30% 30%, var(--accent), transparent 40%); animation: floatB 14s ease-in-out infinite; }
+  @keyframes floatA{ 0%{transform:translateY(0)}50%{transform:translateY(-28px)}100%{transform:translateY(0)} }
+  @keyframes floatB{ 0%{transform:translateY(0)}50%{transform:translateY(-36px)}100%{transform:translateY(0)} }
+
+  /* profile */
+  .profile{ display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center; position:relative; z-index:10 }
+  .avatar-wrap{ width:180px; height:180px; border-radius:20px; overflow:hidden; border:1px solid var(--glass-border); box-shadow:0 18px 40px rgba(2,6,23,0.6); background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) }
+  .avatar-wrap img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform 600ms cubic-bezier(.2,.9,.3,1) }
+  .avatar-wrap:hover img{ transform:scale(1.04) rotate(-1.5deg) }
+  .socials{ display:flex; gap:10px }
+  .socials a{ width:44px; height:44px; display:grid; place-items:center; border-radius:10px; color:var(--white); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid var(--glass-border); transition: transform var(--transition) }
+  .socials a:hover{ transform:translateY(-6px) }
+
+  /* =========================
+     Secciones y títulos
+     ========================= */
+  section{ margin-bottom:28px }
+  .section-title{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px }
+
+  /* =========================
+     Proyectos (epic animations)
+     ========================= */
+  .projects-wrap{ margin-top:6px }
+  .grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:20px }
+  .project{
+    position:relative;
+    display:flex; flex-direction:column; justify-content:space-between; gap:12px;
+    border-radius:14px; padding:14px; min-height:260px; overflow:hidden;
+    transition: transform var(--transition), box-shadow var(--transition);
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    border:1px solid var(--glass-border);
+    transform-style:preserve-3d;
+    perspective:1000px;
+  }
+  .project::after{
+    content:"";
+    position:absolute; inset:0; pointer-events:none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 30%);
+    mix-blend-mode:overlay;
+  }
+  .project:hover{ transform:translateY(-14px) rotateX(2deg); box-shadow: 0 40px 80px rgba(2,6,23,0.7) }
+  .project .meta{ color:var(--muted); font-size:13px }
+  .project h3{ margin:6px 0 6px 0; font-size:18px; display:flex; align-items:center; gap:8px }
+  .project p{ margin:0; color:var(--muted); font-size:14px }
+
+  .thumb-wrap{ width:100%; height:150px; border-radius:12px; overflow:hidden; border:1px solid var(--glass-border); background:rgba(255,255,255,0.01); transform-origin:center; transition: transform 700ms cubic-bezier(.2,.9,.3,1) }
+  .thumb-wrap img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform 900ms cubic-bezier(.2,.9,.3,1) }
+  .project:hover .thumb-wrap{ transform:scale(1.03) rotate(-0.6deg) }
+  .project:hover .thumb-wrap img{ transform:scale(1.06) }
+
+  .project-actions{ display:flex; gap:10px; align-items:center }
+
+  /* epic ribbon */
+  .ribbon{
+    position:absolute; top:12px; left:-36px; transform:rotate(-18deg);
+    background:linear-gradient(90deg,var(--accent-3),var(--accent-2));
+    color:#04202a; padding:6px 48px; font-weight:800; border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,0.4);
+    font-size:12px; letter-spacing:0.6px;
+  }
+
+  /* hover tilt effect (JS) */
+  .tilt{ transform-style:preserve-3d; transition: transform 300ms cubic-bezier(.2,.9,.3,1) }
+
+  /* filters */
+  .filters{ display:flex; gap:8px; align-items:center }
+  .filter-btn{ padding:8px 12px; border-radius:10px; border:1px solid var(--glass-border); background:transparent; color:var(--muted); cursor:pointer; transition: transform var(--transition) }
+  .filter-btn.active{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#04202a; font-weight:700; transform:translateY(-4px) }
+
+  /* =========================
+     Habilidades
+     ========================= */
+  .skills{ display:grid; grid-template-columns: repeat(2, 1fr); gap:18px; margin-top:8px }
+  .skill{ padding:12px; border-radius:10px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.02) }
+  .bar{ height:12px; background:rgba(255,255,255,0.04); border-radius:8px; overflow:hidden; margin-top:8px }
+  .bar > i{ display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); border-radius:8px; transition: width 1200ms cubic-bezier(.2,.9,.3,1) }
+
+  /* =========================
+     Testimonios
+     ========================= */
+  .testimonials-outer{ overflow:hidden; position:relative; padding:6px 0 }
+  .testimonials{ display:flex; gap:12px; align-items:stretch; transition: transform 600ms cubic-bezier(.2,.9,.3,1); will-change:transform }
+  .testimonial{ min-width:320px; max-width:320px; padding:18px; border-radius:12px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.02); flex-shrink:0 }
+
+  /* =========================
+     Contacto
+     ========================= */
+  .contact-grid{ display:grid; grid-template-columns: 1fr 360px; gap:18px; align-items:start; margin-top:8px }
+  form input, form textarea{ width:100%; padding:12px; border-radius:10px; border:1px solid var(--glass-border); background:transparent; color:var(--white); outline:none; resize:vertical }
+
+  /* =========================
+     Modal
+     ========================= */
+  .modal{ position:fixed; inset:0; display:grid; place-items:center; z-index:200; background: linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.88)); opacity:0; pointer-events:none; transition: opacity 300ms ease }
+  .modal.open{ opacity:1; pointer-events:auto }
+  .modal-card{ width: min(980px, 94%); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:22px; border:1px solid var(--glass-border); box-shadow: 0 30px 80px rgba(2,6,23,0.8); transform:translateY(18px); transition: transform 360ms cubic-bezier(.2,.9,.3,1) }
+  .modal.open .modal-card{ transform:translateY(0) }
+  .close-btn{ background:transparent; border:1px solid var(--glass-border); color:var(--muted); padding:8px 10px; border-radius:10px; cursor:pointer }
+
+  /* =========================
+     Partículas sutiles (canvas)
+     ========================= */
+  #particle-canvas{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.08; mix-blend-mode:screen }
+
+  /* reveal */
+  .reveal{ opacity:0; transform: translateY(18px); transition: opacity 700ms var(--transition), transform 700ms var(--transition) }
+  .reveal.show{ opacity:1; transform: translateY(0) }
+
+  /* helpers */
+  .muted{ color:var(--muted) }
+  .flex{ display:flex; gap:12px; align-items:center }
+  .gap-8{ gap:8px }
+
+  /* responsive */
+  @media (max-width:1100px){
+    .hero-grid{ grid-template-columns: 1fr 320px }
+    .grid{ grid-template-columns: repeat(2, 1fr) }
+    .contact-grid{ grid-template-columns: 1fr }
+  }
+  @media (max-width:720px){
+    nav ul{ display:none }
+    .hero-grid{ grid-template-columns: 1fr }
+    .grid{ grid-template-columns: 1fr }
+    .avatar-wrap{ width:140px; height:140px }
+    .testimonial{ min-width:280px; max-width:280px }
+  }
+
+  :focus{ outline: 3px solid rgba(125,211,252,0.12); outline-offset:3px }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="brand" aria-label="Marca ASCM Dev">
+      <div class="logo" aria-hidden="false">
+        <!-- Logo local: perfil.png (reemplaza el texto AS por la imagen perfil.png) -->
+        <img src="perfil.png" alt="Logo ASCM Dev">
+      </div>
+      <div>
+        <div style="font-size:14px">ASCM Dev</div>
+        <div style="font-size:12px;color:var(--muted)">Diseño · Desarrollo · Dominios</div>
+      </div>
+    </div>
+
+    <nav aria-label="Navegación principal">
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#habilidades">Habilidades</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+        <li><a href="#contacto" class="cta">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- canvas partículas -->
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+<!-- blobs decorativos -->
+<div class="blob-wrap" aria-hidden="true">
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div class="card intro reveal" aria-labelledby="introTitle">
+        <h1 id="introTitle">Hola, soy <span style="color:var(--accent)">ASCM Dev</span> — creo experiencias digitales memorables</h1>
+        <p class="lead">Me especializo en crear cualquier tipo de sitio web: noticias, tiendas, portales profesionales y marketplaces. También instalo dominios, despliego en Vercel y configuro backends con Firebase o Python.</p>
+
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:18px">
+          <div class="typing" id="typing" aria-live="polite"></div><div class="cursor" aria-hidden="true"></div>
+        </div>
+
+        <div class="underline" aria-hidden="true"></div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px">
+          <a class="btn" href="#proyectos">Ver proyectos</a>
+          <button class="btn-ghost" id="downloadBtn">Descargar CV</button>
+          <a class="btn-ghost" href="#contacto">Contratar</a>
+        </div>
+
+        <div style="margin-top:22px; display:flex; gap:12px; align-items:center">
+          <div style="display:flex; gap:8px; align-items:center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#9aa4b2" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="muted">Disponible para proyectos freelance y consultoría técnica</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card profile reveal" aria-label="Perfil ASCM Dev">
+        <div class="avatar-wrap" aria-hidden="false">
+          <!-- perfil.jpeg debe estar en la misma carpeta -->
+          <img src="perfil.png" alt="Foto de perfil ASCM Dev" id="profileImage">
+        </div>
+        <div style="font-weight:700">ASCM Dev — Fullstack</div>
+        <div class="muted">HTML · CSS · JS · Python · Firebase · Vercel · Dominios</div>
+        <div class="socials" style="margin-top:12px">
+          <a href="#" title="GitHub" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C7.03 2 3 6.03 3 11c0 4 2.53 7.4 6.04 8.6.44.08.6-.2.6-.44v-1.6c-2.45.54-2.96-1.18-2.96-1.18-.4-1.02-.98-1.3-.98-1.3-.8-.54.06-.54.06-.54.88.06 1.34.9 1.34.9.78 1.34 2.04.96 2.54.74.08-.58.3-.96.54-1.18-1.96-.22-4.02-.98-4.02-4.36 0-.96.34-1.74.9-2.36-.1-.22-.4-1.12.08-2.34 0 0 .74-.24 2.44.9.7-.2 1.46-.3 2.22-.3.76 0 1.52.1 2.22.3 1.7-1.14 2.44-.9 2.44-.9.48 1.22.18 2.12.08 2.34.56.62.9 1.4.9 2.36 0 3.4-2.06 4.14-4.02 4.36.3.26.56.76.56 1.54v2.28c0 .24.16.52.6.44C18.47 18.4 21 15 21 11c0-4.97-4.03-9-9-9z" fill="#9aa4b2"/></svg>
+          </a>
+          <a href="#" title="LinkedIn" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v14H0zM8 8h4.8v2h.1c.7-1.3 2.4-2.6 4.9-2.6C22.6 7.4 24 10 24 14.6V22h-5v-6.6c0-1.6 0-3.6-2.2-3.6-2.2 0-2.6 1.8-2.6 3.5V22H8V8z" fill="#9aa4b2"/></svg>
+          </a>
+          <a href="#" title="Twitter" aria-label="Twitter">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 5.9c-.6.3-1.2.5-1.9.6.7-.4 1.2-1 1.4-1.8-.7.4-1.5.7-2.3.9C18.6 4.8 17.7 4 16.6 4c-1.6 0-2.8 1.3-2.8 2.9 0 .2 0 .4.1.6C10.3 7.4 7 5.8 4.8 3.3c-.3.6-.5 1.3-.5 2 0 1.3.7 2.4 1.8 3-.6 0-1.2-.2-1.7-.5v.1c0 1.9 1.3 3.5 3 3.9-.3.1-.6.1-.9.1-.2 0-.4 0-.6-.1.4 1.3 1.6 2.2 3 2.2C7.6 17 5 17.8 2.7 17.8c-.4 0-.8 0-1.2-.1 1.4.9 3.1 1.4 4.9 1.4 5.9 0 9.2-4.9 9.2-9.2v-.4c.6-.4 1.2-1 1.6-1.6z" fill="#9aa4b2"/></svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PROYECTOS (reemplazados por los solicitados) -->
+  <section id="proyectos" style="padding:0 0 8px 0">
+    <div class="container">
+      <div class="card reveal projects-wrap">
+        <div class="section-title">
+          <div>
+            <h2 style="margin:0">Proyectos destacados</h2>
+            <div class="muted" style="font-size:13px">Portafolio de sitios reales y trabajos — despliegue, dominios y optimización</div>
+          </div>
+          <div class="filters">
+            <button class="filter-btn active" id="filterAll">Todos</button>
+            <button class="filter-btn" id="filterWeb">Web</button>
+            <button class="filter-btn" id="filterApps">Apps</button>
+          </div>
+        </div>
+
+        <div class="grid" id="projectsGrid" aria-live="polite">
+          <!-- 1: Nearme Marketplace -->
+          <article class="project tilt reveal" data-type="web" data-live="https://nearmemarket.com/">
+            <div class="ribbon">Marketplace</div>
+            <div>
+              <div class="meta">Nearme Marketplace</div>
+              <h3>Nearme Marketplace</h3>
+              <p>Plataforma de compras y ventas digitales: catálogo, búsqueda avanzada, gestión de vendedores y pagos.</p>
+            </div>
+            <div class="thumb-wrap">
+              <!-- imagen local: nearmemarket.png -->
+              <img src="nearmemarket.png" alt="Nearme Marketplace — vista previa">
+            </div>
+            <div class="project-actions">
+              <a class="btn" href="https://nearmemarket.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Nearme Marketplace">Visitar</a>
+              <button class="btn-ghost openProject" data-title="Nearme Marketplace" data-desc="Marketplace para compras y ventas digitales. Catálogo, filtros, panel de vendedores y pasarela de pago." data-img="nearmemarket.png">Vista</button>
+            </div>
+          </article>
+
+          <!-- 2: Sin Nada Que Ocultar RD -->
+          <article class="project tilt reveal" data-type="web" data-live="https://www.sinnadaqueocultarrd.com/">
+            <div class="ribbon">Noticias</div>
+            <div>
+              <div class="meta">Periódico digital · RD</div>
+              <h3>Sin Nada Que Ocultar RD</h3>
+              <p>Periódico digital dominicano con secciones de noticias, opinión y multimedia; optimizado para SEO y rendimiento.</p>
+            </div>
+            <div class="thumb-wrap">
+              <!-- imagen local: sinnadaqueocultar.png -->
+              <img src="sinnadaqueocultar.png" alt="Sin Nada Que Ocultar RD — vista previa">
+            </div>
+            <div class="project-actions">
+              <a class="btn" href="https://www.sinnadaqueocultarrd.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Sin Nada Que Ocultar RD">Visitar</a>
+              <button class="btn-ghost openProject" data-title="Sin Nada Que Ocultar RD" data-desc="Periódico digital con CMS personalizado, optimización de carga y despliegue con dominio propio." data-img="sinnadaqueocultar.png">Vista</button>
+            </div>
+          </article>
+
+          <!-- 3: Enhance Star -->
+          <article class="project tilt reveal" data-type="web" data-live="https://enhancestar.online/">
+            <div class="ribbon">Herramienta</div>
+            <div>
+              <div class="meta">Enhance Star</div>
+              <h3>Enhance Star</h3>
+              <p>Web para mejorar calidad de imágenes y eliminar fondos gratis; procesamiento en backend y UI intuitiva.</p>
+            </div>
+            <div class="thumb-wrap">
+              <!-- imagen local: enhancestar.png -->
+              <img src="enhancestar.png" alt="Enhance Star — vista previa">
+            </div>
+            <div class="project-actions">
+              <a class="btn" href="https://enhancestar.online/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Enhance Star">Visitar</a>
+              <button class="btn-ghost openProject" data-title="Enhance Star" data-desc="Servicio para mejorar imágenes y quitar fondos; integración con APIs y procesamiento en la nube." data-img="enhancestar.png">Vista</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HABILIDADES -->
+  <section id="habilidades">
+    <div class="container">
+      <div class="card reveal">
+        <div class="section-title">
+          <div>
+            <h2 style="margin:0">Habilidades</h2>
+            <div class="muted" style="font-size:13px">Tecnologías y competencias — despliegue y operaciones</div>
+          </div>
+        </div>
+
+        <div class="skills">
+          <div class="skill">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <div><strong>HTML · CSS · JS</strong></div>
+              <div class="muted">95%</div>
+            </div>
+            <div class="bar"><i data-width="95%"></i></div>
+          </div>
+
+          <div class="skill">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <div><strong>React · Next.js</strong></div>
+              <div class="muted">90%</div>
+            </div>
+            <div class="bar"><i data-width="90%"></i></div>
+          </div>
+
+          <div class="skill">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <div><strong>Python · Backend</strong></div>
+              <div class="muted">85%</div>
+            </div>
+            <div class="bar"><i data-width="85%"></i></div>
+          </div>
+
+          <div class="skill">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <div><strong>Firebase · Vercel · Dominios</strong></div>
+              <div class="muted">88%</div>
+            </div>
+            <div class="bar"><i data-width="88%"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section id="testimonios">
+    <div class="container">
+      <div class="card reveal">
+        <h2 style="margin:0 0 12px 0">Testimonios</h2>
+        <div class="testimonials-outer" aria-hidden="false">
+          <div class="testimonials" id="testimonials">
+            <div class="testimonial">
+              <strong>María P.</strong>
+              <p class="muted">"ASCM Dev transformó nuestra tienda online: rendimiento, diseño y conversiones mejoraron notablemente."</p>
+            </div>
+            <div class="testimonial">
+              <strong>Carlos R.</strong>
+              <p class="muted">"Rápida implementación del dominio y despliegue en Vercel. Comunicación clara y entregas puntuales."</p>
+            </div>
+            <div class="testimonial">
+              <strong>Agencia X</strong>
+              <p class="muted">"Integración impecable con nuestro stack y soluciones creativas para optimizar imágenes y SEO."</p>
+            </div>
+            <div class="testimonial">
+              <strong>Lucía M.</strong>
+              <p class="muted">"Muy recomendable para proyectos que necesitan tanto diseño como infraestructura y despliegue."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="container">
+      <div class="card reveal">
+        <div class="section-title">
+          <div>
+            <h2 style="margin:0">Contacto</h2>
+            <div class="muted" style="font-size:13px">¿Tienes un proyecto? Hablemos — diseño, desarrollo y despliegue.</div>
+          </div>
+        </div>
+
+        <div class="contact-grid">
+          <form id="contactForm" novalidate>
+            <div style="display:grid; gap:12px">
+              <input type="text" id="name" placeholder="Tu nombre" required aria-required="true" />
+              <input type="email" id="email" placeholder="Tu correo" required aria-required="true" />
+              <input type="text" id="subject" placeholder="Asunto" />
+              <textarea id="message" rows="6" placeholder="Cuéntame sobre tu proyecto (tipo de sitio, dominio, hosting, plazos)" required aria-required="true"></textarea>
+              <div style="display:flex; gap:12px; align-items:center">
+                <button class="btn" type="submit">Enviar mensaje</button>
+                <div id="formMsg" class="muted" style="font-size:13px" role="status" aria-live="polite"></div>
+              </div>
+            </div>
+          </form>
+
+          <aside style="display:flex; flex-direction:column; gap:12px">
+            <div class="card" style="padding:16px">
+              <strong>Contacto directo</strong>
+              <div class="muted" style="margin-top:8px">Correo: hola@ascm.dev</div>
+              <div class="muted">Ubicación: Santo Domingo, RD</div>
+            </div>
+
+            <div class="card" style="padding:16px">
+              <strong>Servicios</strong>
+              <ul style="margin:8px 0 0 16px; color:var(--muted)">
+                <li>Diseño UI/UX y prototipos</li>
+                <li>Desarrollo Frontend y Backend</li>
+                <li>Despliegue, dominios y optimización</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding:28px 20px; text-align:center; color:var(--muted)">
+    © <strong>ASCM Dev</strong> — Portafolio profesional · Hecho con atención al detalle
+  </footer>
+</main>
+
+<!-- Modal -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-card" role="document">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px">
+      <div>
+        <h3 id="modalTitle" style="margin:0">Proyecto</h3>
+        <div class="muted" id="modalDesc" style="font-size:13px">Descripción</div>
+      </div>
+      <div style="display:flex; gap:8px">
+        <button class="close-btn" id="modalClose">Cerrar</button>
+      </div>
+    </div>
+
+    <div style="margin-top:18px; display:grid; gap:12px">
+      <div id="modalImageWrap" style="height:420px; border-radius:10px; overflow:hidden; border:1px solid var(--glass-border); background:rgba(255,255,255,0.01); display:grid; place-items:center">
+        <img id="modalImage" src="" alt="Vista previa del proyecto" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(0.98); transition: transform 420ms cubic-bezier(.2,.9,.3,1)">
+      </div>
+      <div class="muted">Tecnologías: HTML · CSS · JS · Python · Firebase · Vercel</div>
+      <div style="display:flex; gap:8px">
+        <a class="btn" href="#" id="viewLive" target="_blank" rel="noopener noreferrer">Ver en vivo</a>
+        <a class="btn-ghost" href="#" id="viewCode" target="_blank" rel="noopener noreferrer">Ver código</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* =========================
+     Interacciones JS
+     ========================= */
+
+  // Smooth scroll for internal links
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const href = a.getAttribute('href');
+      if(href.startsWith('#')){
+        e.preventDefault();
+        const el = document.querySelector(href);
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+
+  // Typing effect (hero)
+  const typingEl = document.getElementById('typing');
+  const phrases = [
+    'Creo sitios de noticias, tiendas y marketplaces',
+    'Instalo dominios y despliego en Vercel',
+    'Backend con Python y Firebase',
+    'Interfaces rápidas, accesibles y animadas'
+  ];
+  let pIndex = 0, cIndex = 0, forward = true;
+  function typeLoop(){
+    const current = phrases[pIndex];
+    if(forward){
+      cIndex++;
+      typingEl.textContent = current.slice(0,cIndex);
+      if(cIndex === current.length){ forward=false; setTimeout(typeLoop,1200); return; }
+    } else {
+      cIndex--;
+      typingEl.textContent = current.slice(0,cIndex);
+      if(cIndex === 0){ forward=true; pIndex = (pIndex+1)%phrases.length; setTimeout(typeLoop,300); return; }
+    }
+    setTimeout(typeLoop, 50 + Math.random()*40);
+  }
+  typeLoop();
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('show');
+    });
+  }, {threshold:0.12});
+  reveals.forEach(r=>obs.observe(r));
+
+  // Skill bars animation
+  const skillBars = document.querySelectorAll('.bar > i');
+  const skillObs = new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        const i = en.target;
+        const w = i.getAttribute('data-width') || '80%';
+        i.style.width = w;
+        skillObs.unobserve(i);
+      }
+    });
+  }, {threshold:0.2});
+  skillBars.forEach(b=>skillObs.observe(b));
+
+  // Modal logic
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalImage = document.getElementById('modalImage');
+  const viewLive = document.getElementById('viewLive');
+  const viewCode = document.getElementById('viewCode');
+
+  function openModal(title, desc, img, liveUrl, codeUrl){
+    modalTitle.textContent = title;
+    modalDesc.textContent = desc;
+    if(img){
+      modalImage.src = img;
+      modalImage.alt = title + ' — vista previa';
+      // small zoom-in effect
+      setTimeout(()=> modalImage.style.transform = 'scale(1)', 40);
+    } else {
+      modalImage.src = '';
+      modalImage.alt = 'Vista previa no disponible';
+    }
+    viewLive.href = liveUrl || '#';
+    viewCode.href = codeUrl || '#';
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.getElementById('modalClose').focus();
+  }
+
+  document.querySelectorAll('.openProject').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const title = btn.dataset.title || 'Proyecto';
+      const desc = btn.dataset.desc || '';
+      const img = btn.dataset.img || '';
+      // map live url from parent article if present
+      const parent = btn.closest('.project');
+      const live = parent ? parent.dataset.live || '#' : '#';
+      openModal(title, desc, img, live, '#');
+    });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', ()=>{
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    modalImage.style.transform = 'scale(0.98)';
+  });
+  modal.addEventListener('click', e=>{
+    if(e.target === modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); modalImage.style.transform = 'scale(0.98)'; }
+  });
+
+  // Filters with active state
+  const grid = document.getElementById('projectsGrid');
+  const btnAll = document.getElementById('filterAll');
+  const btnWeb = document.getElementById('filterWeb');
+  const btnApps = document.getElementById('filterApps');
+  function setActive(btn){
+    [btnAll, btnWeb, btnApps].forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  btnAll.addEventListener('click', ()=>{ filterProjects('all'); setActive(btnAll); });
+  btnWeb.addEventListener('click', ()=>{ filterProjects('web'); setActive(btnWeb); });
+  btnApps.addEventListener('click', ()=>{ filterProjects('apps'); setActive(btnApps); });
+
+  function filterProjects(type){
+    const items = grid.querySelectorAll('.project');
+    items.forEach(it=>{
+      if(type === 'all' || it.dataset.type === type) it.style.display = '';
+      else it.style.display = 'none';
+    });
+  }
+
+  // Testimonials auto-scroll (responsive)
+  const testWrap = document.getElementById('testimonials');
+  let tIndex = 0;
+  function updateTestimonials(){
+    const children = Array.from(testWrap.children);
+    if(children.length === 0) return;
+    const gap = parseFloat(getComputedStyle(testWrap).gap || 12);
+    const itemWidth = children[0].getBoundingClientRect().width + gap;
+    testWrap.style.transform = `translateX(-${tIndex * itemWidth}px)`;
+  }
+  setInterval(()=>{
+    const children = testWrap.children;
+    if(children.length === 0) return;
+    tIndex = (tIndex + 1) % children.length;
+    updateTestimonials();
+  }, 4200);
+  window.addEventListener('resize', updateTestimonials);
+
+  // Contact form (simulación)
+  const form = document.getElementById('contactForm');
+  const formMsg = document.getElementById('formMsg');
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    if(!name || !email || !message){
+      formMsg.textContent = 'Por favor completa los campos requeridos.';
+      return;
+    }
+    formMsg.textContent = 'Enviando...';
+    setTimeout(()=>{
+      formMsg.textContent = 'Mensaje enviado. Gracias!';
+      form.reset();
+    }, 900);
+  });
+
+  // Download CV (simulación)
+  document.getElementById('downloadBtn').addEventListener('click', e=>{
+    e.preventDefault();
+    const a = document.createElement('a');
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent('CV - ASCM Dev\nDiseñador y desarrollador\nEspecialidades: sitios de noticias, tiendas, marketplaces, despliegue y dominios\nContacto: hola@ascm.dev');
+    a.download = 'CV-ASCM-Dev.txt';
+    a.click();
+  });
+
+  // Respect reduced motion
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(mq.matches){
+    document.querySelectorAll('.cursor, .blob, #particle-canvas, .testimonials').forEach(el=>el.style.animation='none');
+  }
+
+  // Initial adjustments
+  document.addEventListener('DOMContentLoaded', ()=>{
+    document.documentElement.style.overflowX = 'hidden';
+    updateTestimonials();
+    initTilt();
+    initParticles();
+  });
+
+  /* =========================
+     Tilt effect for project cards
+     ========================= */
+  function initTilt(){
+    const tilts = document.querySelectorAll('.tilt');
+    tilts.forEach(card=>{
+      card.addEventListener('mousemove', (e)=>{
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rx = (y - 0.5) * 8; // rotateX
+        const ry = (x - 0.5) * -12; // rotateY
+        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
+      });
+      card.addEventListener('mouseleave', ()=>{
+        card.style.transform = '';
+      });
+    });
+  }
+
+  /* =========================
+     Simple particle background (canvas)
+     ========================= */
+  function initParticles(){
+    const canvas = document.getElementById('particle-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = innerWidth;
+    let h = canvas.height = innerHeight;
+    const particles = [];
+    const count = Math.round((w*h)/90000); // density
+    for(let i=0;i<count;i++){
+      particles.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: 0.6 + Math.random()*2.2,
+        vx: (Math.random()-0.5)*0.2,
+        vy: (Math.random()-0.5)*0.2,
+        hue: 180 + Math.random()*120
+      });
+    }
+    function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+    window.addEventListener('resize', resize);
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        p.x += p.vx;
+        p.y += p.vy;
+        if(p.x < -20) p.x = w + 20;
+        if(p.x > w + 20) p.x = -20;
+        if(p.y < -20) p.y = h + 20;
+        if(p.y > h + 20) p.y = -20;
+        ctx.beginPath();
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*12);
+        g.addColorStop(0, `hsla(${p.hue},80%,70%,0.12)`);
+        g.addColorStop(1, `hsla(${p.hue},80%,60%,0)`);
+        ctx.fillStyle = g;
+        ctx.arc(p.x, p.y, p.r*12, 0, Math.PI*2);
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+</script>
+</body>
+</html>
